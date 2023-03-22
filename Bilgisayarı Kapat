@@ -1,0 +1,26 @@
+#!/bin/bash
+#/Users/$USER/.vscode
+#"Servisi açmak için" launchctl load -w /Users/eryilmaz/.yedekleme_servisi/com.apple.yedek.plist
+#"Servisi kapatmak için" launchctl unload -w /Users/eryilmaz/.yedekleme_servisi/com.apple.yedek.plist
+link="repo_linki"
+TARIH="$(date +%D|tr '/' '-')_yedek"
+DOSYALAR="/Users/$USER/42-EXAM /Users/$USER/Desktop /Users/$USER/.zshrc /Users/$USER/.vscode /Users/$USER/Documents /Users/$USER/Downloads /Users/$USER/Movies /Users/$USER/Music /Users/$USER/Pictures  /Users/$USER/.zshrc /Users/$USER/.zsh_history /Users/$USER/.viminfo /Users/$USER/.vim /Users/$USER/.config  /Users/$USER/.baslat_tool"
+mkdir /goinfre/$TARIH
+tar -cvf /goinfre/$TARIH/"$TARIH.tar" $DOSYALAR
+cd /goinfre/$TARIH
+split -b 50m "$TARIH.tar" "$TARIH.tar."
+cd ..
+git clone $link status
+cd status
+rm -rf *
+git add .
+git commit -m "yapılması gereken"
+git push $link master
+mv /goinfre/$TARIH /goinfre/status/
+rm -rf /goinfre/status/$TARIH/"$TARIH.tar"
+git add .
+git commit -m "$TARIH"
+git push $link master
+rm -rf /goinfre/status
+osascript -e 'tell app "System Events" to shut down'
+exit
